@@ -1,0 +1,44 @@
+const Actions = { 
+    LOGIN : 1,  
+    GET_ALL_FLIGHTS: 3,
+    GET_FLIGHT_BY_ID : 4, 
+    GET_FLIGHTS_BY_PARAMS : 5,
+    GET_ALL_AIRLINES : 6,
+    GET_AIRLINE_BY_ID : 7,
+    GET_CUSTOMER_BY_ID : 8, 
+    ADD_CUSTOMER : 9,
+    UPDATE_CUSTOMER :10,
+    REMOVE_CUSTOMER : 11,
+    ADD_TICKET : 12,
+    REMOVE_TICKET : 13,
+    GET_TICKETS_BY_CUSTOMER : 14,
+    ADD_AIRLINE :15,
+    UPDATE_AIRLINE : 16,
+    REMVOE_AIRLINE : 17,
+    ADD_FLIGHT : 18,
+    UPDATE_FLIGHT : 19,
+    REMOVE_FLIGHT : 20,
+    ADD_ADMINISTRATOR : 21,
+    REMOVE_ADMINISTRATOR : 22,  
+    GET_ALL_CUSTOMERS : 23,
+    GET_ALL_COUNTRIES : 24, 
+    GET_FLIGHTS_BY_AIRLINE : 26,
+    GET_AIRLINES_BY_PARAMS : 27,
+    GET_ALL_USERS : 28,
+    GET_TICKETS_BY_USER : 29,
+    GET_CUSTOMERS_BY_PARAMS : 30
+}
+
+const UserRoles ={
+   CUSTOMER : 1,
+   AIRLINE : 2, 
+   ADMINISTRATOR : 3
+}
+
+const Types ={
+    STRING : 1, 
+    INTEGER : 2,
+    DATE : 3
+}
+
+module.exports = {Actions, Types, UserRoles};
