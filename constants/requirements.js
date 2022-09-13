@@ -1,7 +1,7 @@
-const {Actions, Types} = require('./enums');
+const { Actions, Types } = require('./enums');
 
-module.exports.reuqirements =(action_id)=>{
-    switch(action_id){
+module.exports.reuqirements = (action_id) => {
+    switch (action_id) {
         case Actions.LOGIN:
             return {
                 'username': Types.STRING,
@@ -17,22 +17,23 @@ module.exports.reuqirements =(action_id)=>{
         case Actions.GET_FLIGHT_BY_ID:
         case Actions.GET_AIRLINE_BY_ID:
         case Actions.GET_CUSTOMER_BY_ID:
+        case Actions.GET_ADMINISTRATOR_BY_ID:
         case Actions.REMOVE_TICKET:
         case Actions.REMOVE_FLIGHT:
         case Actions.REMOVE_CUSTOMER:
         case Actions.REMVOE_AIRLINE:
         case Actions.REMOVE_ADMINISTRATOR:
             return {
-                'id' : Types.INTEGER
+                'id': Types.INTEGER
             }
         case Actions.GET_AIRLINES_BY_PARAMS:
             return {
-                'country_id' : Types.INTEGER,
+                'country_id': Types.INTEGER,
                 'name': Types.STRING
             }
         case Actions.ADD_CUSTOMER:
             return {
-                'username' : Types.STRING,
+                'username': Types.STRING,
                 'password': Types.STRING,
                 'email': Types.STRING,
                 'first_name': Types.STRING,
@@ -40,68 +41,74 @@ module.exports.reuqirements =(action_id)=>{
                 'address': Types.STRING,
                 'phone_number': Types.STRING,
                 'credit_card_number': Types.STRING,
-                'image_url' : Types.STRING    
+                'image_url': Types.STRING
             }
-            case Actions.UPDATE_CUSTOMER:
-                return { 
-                   'param':{
-                            'id': Types.INTEGER
-                        },
-                   'form':{
-                        'username': Types.STRING,
-                        'password': Types.STRING,
-                        'email': Types.STRING,
-                        'first_name': Types.STRING,
-                        'last_name': Types.STRING,
-                        'address': Types.STRING,
-                        'phone_number': Types.STRING,
-                        'credit_card_number': Types.STRING,
-                        'image_url' : Types.STRING             
-                    }
-                
+        case Actions.UPDATE_CUSTOMER:
+            return {
+                'param': {
+                    'id': Types.INTEGER
+                },
+                'form': {
+                    'username': Types.STRING,
+                    'password': Types.STRING,
+                    'email': Types.STRING,
+                    'first_name': Types.STRING,
+                    'last_name': Types.STRING,
+                    'address': Types.STRING,
+                    'phone_number': Types.STRING,
+                    'credit_card_number': Types.STRING,
+                    'image_url': Types.STRING
                 }
+
+            }
         case Actions.GET_FLIGHTS_BY_AIRLINE:
             return {
                 'airline_id': Types.INTEGER
             }
         case Actions.ADD_AIRLINE:
             return {
-                'username' : Types.STRING,
+                'username': Types.STRING,
                 'password': Types.STRING,
                 'email': Types.STRING,
                 'name': Types.STRING,
                 'country_id': Types.INTEGER,
-                'image_url' : Types.STRING          
+                'iata': Types.STRING
             }
         case Actions.UPDATE_AIRLINE:
-            return { 
-                'param':{
-                        'id': Types.INTEGER
-                    },
-                'form':{
+            return {
+                'param': {
+                    'id': Types.INTEGER
+                },
+                'form': {
                     'username': Types.STRING,
                     'password': Types.STRING,
                     'email': Types.STRING,
                     'name': Types.STRING,
-                    'country_id': Types.INTEGER, 
-                    'image_url' : Types.STRING                     
-                    }
+                    'country_id': Types.INTEGER,
+                    'iata': Types.STRING
                 }
+            }
 
-        case Actions.ADD_TICKET:{
+        case Actions.ADD_TICKET:
+        case Actions.CHECK_TICKET: {
+                return {
+                    'flight_id': Types.INTEGER,
+                    'customer_id': Types.INTEGER,
+                    'position': Types.STRING
+                }
+            }
+        case Actions.GET_TICKETS_BY_CUSTOMER:
             return {
-                'flight_id': Types.INTEGER,
                 'customer_id': Types.INTEGER
             }
-        }
-        case Actions.GET_TICKETS_BY_CUSTOMER:
-            return{
-                'customer_id': Types.INTEGER
-            } 
-            
+        case Actions.GET_TICKETS_BY_FLIGHT:
+            return {
+                'flight_id': Types.INTEGER
+            }
+
         case Actions.ADD_FLIGHT:
             return {
-                'airline_company_id' : Types.INTEGER,
+                'airline_company_id': Types.INTEGER,
                 'origin_country_id': Types.INTEGER,
                 'destination_country_id': Types.INTEGER,
                 'departure_date': Types.STRING,
@@ -110,16 +117,18 @@ module.exports.reuqirements =(action_id)=>{
                 'landing_date': Types.STRING,
                 'landing_hour': Types.INTEGER,
                 'landing_minute': Types.INTEGER,
-                'price' : Types.INTEGER,
-                'remaining_tickets': Types.INTEGER      
+                'price': Types.INTEGER,
+                'remaining_tickets': Types.INTEGER,
+                'distance': Types.INTEGER,
+                'num_seats': Types.INTEGER
             }
         case Actions.UPDATE_FLIGHT:
-            return { 
-                'param':{
-                        'id': Types.INTEGER
-                    },
-                'form':{
-                    'airline_company_id' : Types.INTEGER,
+            return {
+                'param': {
+                    'id': Types.INTEGER
+                },
+                'form': {
+                    'airline_company_id': Types.INTEGER,
                     'origin_country_id': Types.INTEGER,
                     'destination_country_id': Types.INTEGER,
                     'departure_date': Types.STRING,
@@ -128,21 +137,61 @@ module.exports.reuqirements =(action_id)=>{
                     'landing_date': Types.STRING,
                     'landing_hour': Types.INTEGER,
                     'landing_minute': Types.INTEGER,
-                    'price' : Types.INTEGER,
-                    'remaining_tickets': Types.INTEGER                       
+                    'price': Types.INTEGER,
+                    'remaining_tickets': Types.INTEGER,
+                    'distance': Types.INTEGER,
+                    'num_seats': Types.INTEGER
                 }
             }
         case Actions.GET_CUSTOMERS_BY_PARAMS:
             return {
-                'search' : Types.STRING
+                'search': Types.STRING
+            }
+        case Actions.GET_ADMINISTRATORS_BY_PARAMS:
+            return {
+                'search': Types.STRING
+            }
+        case Actions.GET_CUSTOMERS_BUSSINESS_DATA:
+            return {
+                'search': Types.STRING
+            }
+        case Actions.GET_AIRLINES_BUSSINESS_DATA:
+            return {
+                'search': Types.STRING
             }
         case Actions.ADD_ADMINISTRATOR:
             return {
-                'username' : Types.STRING,
+                'username': Types.STRING,
                 'password': Types.STRING,
                 'email': Types.STRING,
                 'first_name': Types.STRING,
-                'last_name': Types.STRING           
+                'last_name': Types.STRING,
+                'image_url': Types.STRING
+            }
+        case Actions.UPDATE_ADMINISTRATOR:
+        case Actions.UPDATE_ADMINISTRATOR_BY_PEER:
+            return {
+                'param': {
+                    'id': Types.INTEGER
+                },
+                'form': {
+                    'username': Types.STRING,
+                    'password': Types.STRING,
+                    'email': Types.STRING,
+                    'first_name': Types.STRING,
+                    'last_name': Types.STRING,
+                    'image_url': Types.STRING
+                }
+            }
+        case Actions.GET_COUNT_FLIGHTS:
+        case Actions.GET_PURCHASES_BY_CUSTOMERS:
+        case Actions.GET_SALES_BY_AIRLINES:
+        case Actions.GET_SALES_DAILY_DATA:
+        case Actions.GET_CAPACITIES_UTIL:
+            return {
+                'start_date': Types.STRING,
+                'end_date': Types.STRING,
+                'destination_country_id': Types.STRING
             }
         default:
             return undefined;

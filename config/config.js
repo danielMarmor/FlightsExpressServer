@@ -1,6 +1,7 @@
 const config = {
     app :{
-        port : 8080
+        port : 8080,
+        timeout : 15000
     },
     rabbit :{
         host: 'amqp://localhost:5672',

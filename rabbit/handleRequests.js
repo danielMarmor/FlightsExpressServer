@@ -3,7 +3,6 @@ const responseConsumer = require('./reponseConsumer');
 const AsyncLock = require('async-lock');
 const correlPool = require('../models/correlationPool');
 const config = require('../config/config');
-
 const readOnlyQueueName = config.rabbit.readOnlyQueue;
 const writeQueueName = config.rabbit.writeQueue;
 

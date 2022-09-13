@@ -16,7 +16,7 @@ module.exports.processGet =(req, res, responseData)=>{
         return;
     }
     if (exception){
-        res.status(200).send(exception);
+        res.status(401).send(exception);
         return;
     }
     if (payload){
@@ -34,7 +34,7 @@ module.exports.processPost =(req, res, responseData)=>{
         return;
     }
     if (exception){
-        res.status(200).send(exception);
+        res.status(401).send(exception);
         return;
     }
     if (payload){
@@ -52,7 +52,7 @@ module.exports.processPut =(req, res, responseData)=>{
         return;
     }
     if (exception){
-        res.status(200).send(exception);
+        res.status(401).send(exception);
         return;
     }
     if (payload){
@@ -76,7 +76,7 @@ module.exports.processDelete =(req, res, responseData)=>{
         return;
     }
     if (exception){
-        res.status(200).send(exception);
+        res.status(401).send(exception);
         return;
     }
     if (payload){
@@ -104,10 +104,15 @@ module.exports.processLogin =(req, res, responseData)=>{
         return;
     }
     if (payload){
-        const endocedBody = payload;
-        const token = createToken(endocedBody);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-        res.status(201).json({ token });
+        const {token} = payload;
+        const encodedToken = createToken(token);
+        res.cookie('jwt', encodedToken,  { httpOnly: true, maxAge: maxAge * 1000 });
+        // res.cookie('jwt', encodedToken, { httpOnly: false, maxAge: maxAge * 1000, sameSite: 'None', secure: true});
+        // res.writeHead(201, npx{
+        //     "Set-Cookie": `mycookie=test`,
+        //     "Content-Type": `text/plain`
+        // });
+        res.status(201).json({ payload });
         return;
     }
     res.status(501).send('Internal Server Error');

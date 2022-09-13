@@ -178,7 +178,7 @@ module.exports.updateAirline = async(req, res)=>{
                 'id': null,
                 'name': req.body.name,
                 'country_id': parseInt(req.body.country_id),
-                'image_url': req.body.image_url,
+                'iata': req.body.iata,
                 'user_id' : null
             },
             'user': {
@@ -221,6 +221,8 @@ module.exports.addFligth = async(req, res)=>{
                 'landing_minute':  parseInt(req.body.landing_minute),
                 'price': parseFloat(req.body.price),
                 'remaining_tickets':  parseInt(req.body.remaining_tickets),
+                'distance': parseFloat(req.body.distance),
+                'num_seats':  parseInt(req.body.num_seats)
             }
         }
     };
@@ -261,6 +263,8 @@ module.exports.updateFlight = async(req, res)=>{
                 'landing_minute':  parseInt(req.body.landing_minute),
                 'price': parseFloat(req.body.price),
                 'remaining_tickets':  parseInt(req.body.remaining_tickets),
+                'distance': parseFloat(req.body.distance),
+                'num_seats':  parseInt(req.body.num_seats)
             }
         }
     };

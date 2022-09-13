@@ -1,5 +1,5 @@
 const {sendRequest, getResponse} = require('../rabbit/handleRequests');
-const {processGet, processPost, processDelete, processPut}= require('../models/processResponse');
+const {processGet, processPost, processDelete, processPut, processLogin}= require('../models/processResponse');
 const {Actions, UserRoles,} = require('../constants/enums');
 const {reuqirements} = require('../constants/requirements');
 const {ValidateParams, ValidateForm, ValidateQuery} = require('../models/validateRequest');
@@ -177,6 +177,95 @@ module.exports.getCustomersByParams= async(req, res)=>{
     processGet(req, res, resposne);
     return;
 }
+module.exports.getCustomersBussinessData= async(req, res)=>{
+    const actionId = Actions.GET_CUSTOMERS_BUSSINESS_DATA;
+    const reqQuery = reuqirements(actionId);
+    const validated = ValidateQuery(req, reqQuery);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'search' : !req.query.search ? null : req.query.search 
+        }
+    };
+    const correl_id = await sendRequest(request, false);
+    const resposne = await getResponse(correl_id);
+    processGet(req, res, resposne);
+    return;
+}
+module.exports.getAirlinesBussinessData= async(req, res)=>{
+    const actionId = Actions.GET_AIRLINES_BUSSINESS_DATA;
+    const reqQuery = reuqirements(actionId);
+    const validated = ValidateQuery(req, reqQuery);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'search' : !req.query.search ? null : req.query.search 
+        }
+    };
+    const correl_id = await sendRequest(request, false);
+    const resposne = await getResponse(correl_id);
+    processGet(req, res, resposne);
+    return;
+}
+
+module.exports.getAdministratorsByParams= async(req, res)=>{
+    const actionId = Actions.GET_ADMINISTRATORS_BY_PARAMS;
+    const reqQuery = reuqirements(actionId);
+    const validated = ValidateQuery(req, reqQuery);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'search' : !req.query.search ? null : req.query.search 
+        }
+    };
+    const correl_id = await sendRequest(request, false);
+    const resposne = await getResponse(correl_id);
+    processGet(req, res, resposne);
+    return;
+}
+
+module.exports.getAdministratorById = async(req, res)=>{
+    //VALIDATION
+    const actionId = Actions.GET_ADMINISTRATOR_BY_ID;
+    const reqParams = reuqirements(actionId);
+    const validated = ValidateParams(req, reqParams);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    //PARAM
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'administrator_id': parseInt(req.params.id)
+        }
+    };
+    const correl_id = await sendRequest(request, false);
+    const response = await getResponse(correl_id);
+    processGet(req, res, response);
+    return;
+}
+
 module.exports.getCustomerById= async(req, res)=>{
     //VALIDATION
     const actionId = Actions.GET_CUSTOMER_BY_ID;
@@ -318,7 +407,7 @@ module.exports.addAirline = async(req, res)=>{
             'id': null,
             'name': req.body.name,
             'country_id': parseInt(req.body.country_id),
-            'image_url': req.body.image_url,
+            'iata': req.body.iata,
             'user_id': null
         },
             'user': {
@@ -357,7 +446,7 @@ module.exports.updateAirline = async(req, res)=>{
                 'id': null,
                 'name': req.body.name,
                 'country_id': parseInt(req.body.country_id),
-                'image_url': req.body.image_url,
+                'iata': req.body.iata,
                 'user_id' : null
             },
             'user': {
@@ -412,6 +501,7 @@ module.exports.addAdministrator = async(req, res)=>{
                 'id': null,
                 'first_name': req.body.first_name,
                 'last_name': req.body.last_name,
+                'image_url': !req.body.image_url ? null :req.body.image_url,
                 'user_id': null
             },
             'user': {
@@ -426,6 +516,87 @@ module.exports.addAdministrator = async(req, res)=>{
     const correl_id = await sendRequest(request, true);
     const resposne = await getResponse(correl_id);
     processPost(req, res, resposne);
+    return;
+}
+module.exports.updateAdministrator = async(req, res)=>{
+    const actionId = Actions.UPDATE_ADMINISTRATOR;
+    const {param, form} = reuqirements(actionId);
+    const validatedParam = ValidateParams(req, param);
+    if (!validatedParam){
+        res.status(400).send('Missing Values!');
+        return; 
+    }
+    const validatedForm = ValidateForm(req, form);
+    if (!validatedForm){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data' : {
+            'token': res.locals.token,
+            'administrator_id': parseInt(req.params.id),
+            'administrator': {
+                'id': null,
+                'first_name': req.body.first_name,
+                'last_name': req.body.last_name,
+                'image_url': !req.body.image_url ? null :req.body.image_url,
+                'user_id': null
+            },
+            'user': {
+                'id': null,
+                'username': req.body.username,
+                'password': req.body.password,
+                'email': req.body.email,
+                'user_role': UserRoles.ADMINISTRATOR
+            }
+        }
+    };
+    const correl_id = await sendRequest(request, true);
+    const resposne = await getResponse(correl_id);
+    processLogin(req, res, resposne);
+    return;
+}
+
+module.exports.updateAdministratorByPeer = async(req, res)=>{
+    const actionId = Actions.UPDATE_ADMINISTRATOR_BY_PEER
+    const {param, form} = reuqirements(actionId);
+    const validatedParam = ValidateParams(req, param);
+    if (!validatedParam){
+        res.status(400).send('Missing Values!');
+        return; 
+    }
+    const validatedForm = ValidateForm(req, form);
+    if (!validatedForm){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data' : {
+            'token': res.locals.token,
+            'administrator_id': parseInt(req.params.id),
+            'administrator': {
+                'id': null,
+                'first_name': req.body.first_name,
+                'last_name': req.body.last_name,
+                'image_url': !req.body.image_url ? null :req.body.image_url,
+                'user_id': null
+            },
+            'user': {
+                'id': null,
+                'username': req.body.username,
+                'password': req.body.password,
+                'email': req.body.email,
+                'user_role': UserRoles.ADMINISTRATOR
+            }
+        }
+    };
+    const correl_id = await sendRequest(request, true);
+    const resposne = await getResponse(correl_id);
+    processLogin(req, res, resposne);
     return;
 }
 module.exports.removeAdministrator = async(req, res)=>{
@@ -447,6 +618,122 @@ module.exports.removeAdministrator = async(req, res)=>{
     const correl_id = await sendRequest(request, false);
     const resposne = await getResponse(correl_id);
     processDelete(req, res, resposne);
+    return;
+}
+
+module.exports.getPutchasesByCustomers= async(req, res)=>{
+    const actionId = Actions.GET_PURCHASES_BY_CUSTOMERS;
+    const reqQuery = reuqirements(actionId);
+    const validated = ValidateQuery(req, reqQuery);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'start_date' : !req.query.start_date ? null : req.query.start_date,
+            'end_date' : !req.query.end_date ? null : req.query.end_date,
+            'destination_country_id' :  req.query.destination_country_id == 'X' ? -1 : parseInt(req.query.destination_country_id)
+        }
+    };
+    const correl_id = await sendRequest(request, false);
+    const resposne = await getResponse(correl_id);
+    processGet(req, res, resposne);
+    return;
+}
+module.exports.getSalesByAirlines= async(req, res)=>{
+    const actionId = Actions.GET_SALES_BY_AIRLINES;
+    const reqQuery = reuqirements(actionId);
+    const validated = ValidateQuery(req, reqQuery);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'start_date' : !req.query.start_date ? null : req.query.start_date,
+            'end_date' : !req.query.end_date ? null : req.query.end_date,
+            'destination_country_id' :  req.query.destination_country_id == 'X' ? -1 : parseInt(req.query.destination_country_id)
+        }
+    };
+    const correl_id = await sendRequest(request, false);
+    const resposne = await getResponse(correl_id);
+    processGet(req, res, resposne);
+    return;
+}
+module.exports.getCountFlights= async(req, res)=>{
+    const actionId = Actions.GET_COUNT_FLIGHTS;
+    const reqQuery = reuqirements(actionId);
+    const validated = ValidateQuery(req, reqQuery);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'start_date' : !req.query.start_date ? null : req.query.start_date,
+            'end_date' : !req.query.end_date ? null : req.query.end_date,
+            'destination_country_id' :  req.query.destination_country_id == 'X' ? -1 : parseInt(req.query.destination_country_id) 
+        }
+    };
+    const correl_id = await sendRequest(request, false);
+    const resposne = await getResponse(correl_id);
+    processGet(req, res, resposne);
+    return;
+}
+module.exports.getSalesDailyData= async(req, res)=>{
+    const actionId = Actions.GET_SALES_DAILY_DATA;
+    const reqQuery = reuqirements(actionId);
+    const validated = ValidateQuery(req, reqQuery);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'start_date' : !req.query.start_date ? null : req.query.start_date,
+            'end_date' : !req.query.end_date ? null : req.query.end_date,
+            'destination_country_id' :  req.query.destination_country_id == 'X' ? -1 : parseInt(req.query.destination_country_id)
+        }
+    };
+    const correl_id = await sendRequest(request, false);
+    const resposne = await getResponse(correl_id);
+    processGet(req, res, resposne);
+    return;
+}
+module.exports.getCapacitiesUtil= async(req, res)=>{
+    const actionId = Actions.GET_CAPACITIES_UTIL;
+    const reqQuery = reuqirements(actionId);
+    const validated = ValidateQuery(req, reqQuery);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'start_date' : !req.query.start_date ? null : req.query.start_date,
+            'end_date' : !req.query.end_date ? null : req.query.end_date,
+            'destination_country_id' :  req.query.destination_country_id == 'X' ? -1 : parseInt(req.query.destination_country_id)
+        }
+    };
+    const correl_id = await sendRequest(request, false);
+    const resposne = await getResponse(correl_id);
+    processGet(req, res, resposne);
     return;
 }
 

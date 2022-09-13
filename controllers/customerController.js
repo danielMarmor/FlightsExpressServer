@@ -135,7 +135,55 @@ module.exports.getAllCountries = async(req, res)=>{
     processGet(req, res, resposne);
     return;
 }
+
+module.exports.getTicketsByFlightId= async(req, res)=>{
+    //VALIDATION
+    const actionId = Actions.GET_TICKETS_BY_FLIGHT;
+    const reqParams = reuqirements(actionId);
+    const validated = ValidateParams(req, reqParams);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    //PARAM
+    const request = {
+        'facade_name': 'cust',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'flight_id': parseInt(req.params.flight_id)
+        }
+    };
+    const correl_id = await sendRequest(request, false);
+    const resposne = await getResponse(correl_id);
+    processGet(req, res, resposne);
+    return;
+}
 //CUSTOMER
+module.exports.getCustomerById= async(req, res)=>{
+    //VALIDATION
+    const actionId = Actions.GET_CUSTOMER_BY_ID;
+    const reqParams = reuqirements(actionId);
+    const validated = ValidateParams(req, reqParams);
+    if (!validated){
+        res.status(400).send('Missing Values!');
+        return;
+    }
+    //PARAM
+    const request = {
+        'facade_name': 'admin',
+        'action_id': actionId,
+        'data': {
+           'token': res.locals.token,
+           'customer_id': parseInt(req.params.id)
+       }
+    };
+    const correl_id = await sendRequest(request, false);
+    const resposne = await getResponse(correl_id);
+    processGet(req, res, resposne);
+    return;
+}
+
 module.exports.updateCustomer = async(req, res)=>{   
     const actionId = Actions.UPDATE_CUSTOMER;
     const {param, form} = reuqirements(actionId);
@@ -179,6 +227,31 @@ module.exports.updateCustomer = async(req, res)=>{
     processLogin(req, res, resposne);
     return;   
 }
+module.exports.checkTicket = async(req, res)=>{
+    const actionId = Actions.CHECK_TICKET;
+    const reqForm= reuqirements(actionId);
+    const validatedForm = ValidateForm(req, reqForm);
+    if (!validatedForm){
+        res.status(400).send('Missing Values!');
+        return; 
+    }
+    const request = {
+        'facade_name': 'cust',
+        'action_id': actionId,
+        'data': {
+            'token': res.locals.token,
+            'ticket':{
+                'flight_id': parseInt(req.body.flight_id),
+                'customer_id': parseInt(req.body.customer_id),
+                'position': req.body.position
+            }         
+        }
+    };
+    const correl_id = await sendRequest(request, true);
+    const resposne = await getResponse(correl_id);
+    processPost(req, res, resposne);
+    return;
+}
 module.exports.addTicket = async(req, res)=>{
     const actionId = Actions.ADD_TICKET;
     const reqForm= reuqirements(actionId);
@@ -194,7 +267,8 @@ module.exports.addTicket = async(req, res)=>{
             'token': res.locals.token,
             'ticket':{
                 'flight_id': parseInt(req.body.flight_id),
-                'customer_id': parseInt(req.body.customer_id)
+                'customer_id': parseInt(req.body.customer_id),
+                'position': req.body.position
             }         
         }
     };

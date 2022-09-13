@@ -204,7 +204,7 @@ module.exports.addAirline = async(req, res)=>{
             'id': null,
             'name': req.body.name,
             'country_id': req.body.country_id,
-            'image_url': req.body.image_url,
+            'iata': req.body.iata,
             'user_id': null
         },
             'user': {
